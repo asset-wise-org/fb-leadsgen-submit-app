@@ -4,9 +4,9 @@ import { ProjectProps } from '@/app/utils/type';
 
 export async function GET() {
   try {
-    const response = await fetch('https://api.assetwise.co.th/cis/api/Master/GetProjects', {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_PATH_API}/api/Master/GetProjects`, {
       headers: {
-        'Authorization': 'Basic YXN3X2Npc19jdXN0b21lcjphc3dfY2lzX2N1c3RvbWVyQDIwMjMh'
+        'Authorization': `${process.env.NEXT_PUBLIC_AUTH}`
       }
     });
 
@@ -27,21 +27,3 @@ export async function GET() {
     );
   }
 } 
-
-export async function POST(request: Request) {
-  try {
-    const body = await request.json();
-    const data = await fetch('https://api.assetwise.co.th/cis/api/Customer/SaveOtherSource', {
-      method: 'POST',
-      body: JSON.stringify(body),
-      headers: {
-        'Authorization': 'Basic YXN3X2Npc19jdXN0b21lcjphc3dfY2lzX2N1c3RvbWVyQDIwMjMh',
-        'Content-Type': 'application/json'
-      }
-    });
-    console.log(data);
-    return NextResponse.json(data);
-  } catch (error) {
-    return NextResponse.json({ error: 'Failed to fetch projects' }, { status: 500 });
-  }
-}

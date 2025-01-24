@@ -9,6 +9,7 @@ export async function saveCustomerData(formData: any) {
       body: JSON.stringify(formData),
       headers: myHeaders,
     });
+    
 
     const res = await response.json()
     console.log(res);

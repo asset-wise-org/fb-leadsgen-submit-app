@@ -26,7 +26,7 @@ export default function ApplicationForm() {
     ProjectName: "",
     ContactChannelID: 21,
     ContactTypeID: 35,
-    RefID: new Date().getTime().toString(),
+    RefID: 67175,
     RefDate: new Date().toISOString(),
     Fname: "",
     Lname: "",
@@ -42,7 +42,9 @@ export default function ApplicationForm() {
     utmMedium: "",
     utmCampaign: "",
     utmTerm: "",
-    FollowUpID: 42
+    FollowUpID: 42,
+    FlagContactAccept: 1,
+    FlagPersonalAccept: 1
   })
 
   const [isReviewOpen, setIsReviewOpen] = useState(false)
@@ -60,7 +62,6 @@ export default function ApplicationForm() {
   const handleSelectChange = (field: string) => (
     event: SelectChangeEvent
   ) => {
-    console.log(event.target.value);
     setFormData((prev) => ({ ...prev, [field]: event.target.value }))
   }
 
@@ -162,7 +163,7 @@ export default function ApplicationForm() {
               { field: "Fname", type: "text", label: "ชื่อ", required: true },
               { field: "Lname", type: "text", label: "นามสกุล", required: true },
               { field: "Tel", type: "tel", label: "เบอร์โทรศัพท์", required: true },
-              { field: "email", type: "email", label: "อีเมล", required: true },
+              { field: "Email", type: "email", label: "อีเมล", required: true },
               { field: "ModelInterest", type: "text", label: "ประเภทห้อง" },
               { field: "PriceInterest", type: "text", label: "งบประมาณ" },
               { field: "PurchasePurpose", type: "text", label: "วัตถุประสงค์" },

@@ -6,7 +6,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: '/api/:path*',
-        destination: 'https://aswinno.assetwise.co.th/CISUAT/api/:path*',
+        destination: 'https://api.assetwise.co.th/cis/api/:path*',
       },
     ];
   },
