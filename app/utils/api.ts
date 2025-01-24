@@ -9,13 +9,13 @@ export async function saveCustomerData(formData: any) {
       body: JSON.stringify(formData),
       headers: myHeaders,
     });
-    
+
 
     const res = await response.json()
-    console.log(res);
+    console.log(res.Success);
 
-    if (!response.ok) {
-      throw new Error('Network response was not ok');
+    if (!res.Success) {
+      throw new Error('Error: ' + res.Message);
     }
 
     return res

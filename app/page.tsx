@@ -12,6 +12,8 @@ import {
   Typography,
   SelectChangeEvent,
   Autocomplete,
+  Backdrop,
+  CircularProgress,
 } from "@mui/material"
 import projectsJson from "./data/projects.json"
 import { saveCustomerData } from "./utils/api"
@@ -44,7 +46,10 @@ export default function ApplicationForm() {
     utmTerm: "",
     FollowUpID: 42,
     FlagContactAccept: 1,
-    FlagPersonalAccept: 1
+    FlagPersonalAccept: 1,
+    AppointDate: "",
+    AppointTime: "",
+    AppointTimeEnd: ""
   })
 
   const [isReviewOpen, setIsReviewOpen] = useState(false)
@@ -52,6 +57,7 @@ export default function ApplicationForm() {
   const [resultMessage, setResultMessage] = useState("")
   const [isError, setIsError] = useState(false)
   const { projects, isLoading, error } = useProjects()
+  const [isSubmitLoading, setIsSubmitLoading] = useState(false)
 
   const handleTextChange = (field: string) => (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -67,6 +73,7 @@ export default function ApplicationForm() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
+    setIsSubmitLoading(true)
     // Validate required fields
     if (!formData.ProjectID) {
       setResultMessage("กรุณาเลือกโครงการ")
@@ -107,10 +114,12 @@ export default function ApplicationForm() {
       return
     }
     setIsReviewOpen(true)
+    setIsSubmitLoading(false)
   }
 
   const handleConfirm = async () => {
     setIsReviewOpen(false)
+    setIsSubmitLoading(true)
     try {
       await saveCustomerData(formData)
       setResultMessage("บันทึกข้อมูลเรียบร้อย")
@@ -121,6 +130,7 @@ export default function ApplicationForm() {
       setIsError(true)
     }
     setIsResultOpen(true)
+    setIsSubmitLoading(false)
   }
 
   const clearForm = () => {
@@ -189,6 +199,55 @@ export default function ApplicationForm() {
               </FormControl>
             ))}
 
+            <FormControl fullWidth margin="normal">
+              <TextField
+                type="date"
+                label="วันที่นัดหมาย"
+                fullWidth
+                margin="normal"
+                name="AppointDate" 
+                value={formData.AppointDate || ''}
+                onChange={handleTextChange('AppointDate')}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+            </FormControl>
+
+            {formData.AppointDate && (
+              <>
+                <FormControl fullWidth margin="normal">
+                  <TextField
+                    type="time"
+                    label="เวลานัดเริ่มต้น"
+                    fullWidth
+                    margin="normal"
+                    name="AppointTime"
+                    value={formData.AppointTime || ''}
+                    onChange={handleTextChange('AppointTime')}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                  />
+                </FormControl>
+
+                <FormControl fullWidth margin="normal">
+                  <TextField
+                    type="time" 
+                    label="เวลานัดสิ้นสุด"
+                    fullWidth
+                    margin="normal"
+                    name="AppointTimeEnd"
+                    value={formData.AppointTimeEnd || ''}
+                    onChange={handleTextChange('AppointTimeEnd')}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                  />
+                </FormControl>
+              </>
+            )}
+
             <Button type="submit" variant="contained" color="primary" size="large" fullWidth style={{ marginTop: "1rem" }}>
               ส่งข้อมูล
             </Button>
@@ -211,6 +270,11 @@ export default function ApplicationForm() {
         message={resultMessage}
         isError={isError}
       />
+      {isSubmitLoading && 
+        <Backdrop sx={(theme) => ({ color: '#fff', zIndex: theme.zIndex.drawer + 1 })} open={isSubmitLoading}>
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      }
     </Container>
   )
 }
